@@ -15,5 +15,93 @@
 
   <body>
     <%= yield %>
+    <% root_folder = File.join(root_path, '/') %>
+    <% import_path = File.join(root_folder, 'vite-dev/@fs/workspaces/CircuitVerse/simulator/src/data/save.js') %>
+    <script type="module">
+    import {generateSaveData} from "/vite-dev/@fs/workspaces/CircuitVerse/simulator/src/data/save.js"    
+    import load from "/vite-dev/@fs/workspaces/CircuitVerse/simulator/src/data/load.js"
+    console.log("hello owwiofj")
+    const ws=new WebSocket("ws://127.0.0.1:3000/cable")
+    ws.onopen=()=>{
+      console.log("connected to web socket")
+      const sim =document.getElementById("simulationArea");
+      // function escapeHtml(text) {
+      //   return text.replace(/[&<>"'\/]/g, function (match) {
+      //     switch (match) {
+      //       case '&':
+      //         return '&amp;';
+      //       case '<':
+      //         return '&lt;';
+      //       case '>':
+      //         return '&gt;';
+      //       case '"':
+      //         return '&quot;';
+      //       case "'":
+      //         return '&#39;';
+      //       case '/':
+      //         return '&#x2F;';
+      //     }
+      //   });
+      // }
+      console.log(JSON.parse(generateSaveData(document.getElementById('projectName').value,false)))
+      var data1= {
+    "name": "Untitled",
+    "timePeriod": 500,
+    "clockEnabled": true,
+    "projectId": "HZpIGWpBx2mEqgmju6al",
+    "focussedCircuit": 7633923181,
+    "orderedTabs": [
+        "7633923181"
+    ],
+    "scopes": [
+        {
+            "layout": {
+                "width": 100,
+                "height": 40,
+                "title_x": 50,
+                "title_y": 13,
+                "titleEnabled": true
+            },
+            "verilogMetadata": {
+                "isVerilogCircuit": false,
+                "isMainCircuit": false,
+                "code": "// Write Some Verilog Code Here!",
+                "subCircuitScopeIds": []
+            },
+            "allNodes": [],
+            "id": 7633923181,
+            "name": "Main",
+            "restrictedCircuitElementsUsed": [],
+            "nodes": []
+        }
+    ]
+}
+      load(data1)
+      console.log(sim)
+      ws.send(
+        JSON.stringify({
+          command: "realTC",
+          data: JSON.stringify(),
+          identifier: JSON.stringify({
+            id: "SimulatorChannel",
+            channel:"SimulatorChannel"
+          })
+        })
+      )
+    }
+    ws.onmessage=(e)=>{
+      const data= JSON.parse(e.data)
+      if(data.type=="ping") return;
+      if(data.type=="welcome") return;
+      if(data.type=="confirm_subscription") return;
+      console.log(e.data)
+      if(data.type=="realTC"){
+        const sim =document.getElementById("simulationArea");
+        console.log(sim)
+        // sim.innerHTML=data.message
+      }
+    }
+    
+    </script>
   </body>
 </html>

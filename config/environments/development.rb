@@ -4,7 +4,7 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-
+  config.action_cable.allowed_request_origins = ['*']
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -38,7 +38,7 @@ Rails.application.configure do
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
-  
+
   # Disable origin check for Cross-Site Request Forgery (CSRF) protection for codespaces
   if(ENV["DEV_CONTAINER"] === "true")
     config.action_controller.forgery_protection_origin_check = false

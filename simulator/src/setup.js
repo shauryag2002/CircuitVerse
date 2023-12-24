@@ -28,6 +28,8 @@ import { setupCodeMirrorEnvironment } from './Verilog2CV';
 import { keyBinder } from './hotkey_binder/keyBinder';
 import '../vendor/jquery-ui.min.css';
 import '../vendor/jquery-ui.min';
+import { generateSaveData } from './data/save';
+import consumer from "../../cv-frontend-vue/src/plugins/consumer"
 
 window.width = undefined;
 window.height = undefined;
@@ -146,6 +148,11 @@ function setupElementLists() {
  * @category setup
  */
 export function setup() {
+    const canvas = document.getElementById("simulationArea")
+  canvas?.addEventListener("mousemove",()=>{
+    console.log("change")
+        consumer.subscriptions.send({channel: 'SimulatorChannel',id: "SimulatorChannel", data: generateSaveData((document.getElementById('projname'))?.value, false)})
+    })
     const startListeners = embed ? startEmbedListeners : startMainListeners;
     setupElementLists();
     setupEnvironment();

@@ -178,6 +178,7 @@ export function loadScope(scope, data) {
  */
 export default function load(data) {
     // If project is new and no data is there, then just set project name
+    console.log(data)
     if (!data) {
         setProjectName(__projectName);
         return;
